@@ -4,19 +4,14 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
-  , socketio = require('socket.io')
-  , redis = require('redis')
-  ;
+  , redis = require('redis');
 
-var app = express()
+var app =  exports.app = express()
 	, server = http.createServer(app)
-	, io		 = socketio.listen(server)
 	, client = redis.createClient()
-	;
+	, chat	 = require('./lib/chat');
 
 
 // all environments
@@ -33,14 +28,15 @@ app.use(app.router);
 app.use(require('less-middleware')({ src: __dirname + '/public' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(chat);
+
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
-app.get('/users', user.list);
-
-server.listen(app.get('port'), function(){
+exports.server = server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+require('./sockets')(app, exports.server);
