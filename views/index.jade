@@ -1,9 +1,23 @@
 extends layout
 
 block content
-	script
-		var socket = io.connect('http://localhost:3000');
-		socket.on('chat', function (data) {
-			console.log(data);
-			socket.emit('chat response', {my: 'chat response to you'});
-		});
+	.container
+		.row
+			.col-md-8
+				input(type='text' placeholder='Ex: Walter White' class='form-control' id='name')
+			.col-md-4
+				button(type='button' class='btn btn-primary' id='join') Join Conversation
+		br
+		br
+		.row
+			.col-md-10
+				div(class="panel panel-info" style="height: 300px; scroll: auto;")
+					.panel-body
+						ul(class='list-group' id='chat-group')
+		br
+		br
+		.row
+			.col-md-8
+				input(type='text' placeholder='Ex: Hellooo!' class='form-control' id='msgText' disabled)
+			.col-md-4
+				button(type='button' class='btn btn-primary' id='send' disabled) Broadcast Message

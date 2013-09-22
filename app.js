@@ -39,4 +39,4 @@ exports.server = server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-require('./sockets')(app, exports.server);
+require('./lib/sockets')(app, exports.server);
