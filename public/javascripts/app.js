@@ -1,6 +1,6 @@
 (function (win, doc) {
 	
-	var socket = io.connect('http://localhost:3000')
+	var socket = io.connect(win.location.protocol + '//' + win.location.host)
     , joinButton = doc.getElementById('join')
     , msgTextBox = doc.getElementById('msgText')
     , sendButton = doc.getElementById('send')
@@ -8,14 +8,35 @@
 
 	socket.on('chat', function (data) {
 		var grp = doc.getElementById('chat-group');
-		grp.insertAdjacentHTML('beforeend', '<p>'+ data.msg +'</p>');
+		grp.insertAdjacentHTML('beforeend', '<p>' + data.msg + '</p>');
 	});
+
+  socket.on('startsession', function (data) {
+    var grp = doc.getElementById('user-group');
+    grp.insertAdjacentHTML('beforeend', '<li id="'+ data.name +'">' + data.name + '</li>');
+  });
+
+  socket.on('endsession', function (user) {
+    var usr = doc.getElementById(user);
+    usr.innerHTML = null;
+    delete usr;
+  });
+
+  socket.on('newsession', function (users) {
+    if(users) {
+      var grp = doc.getElementById('user-group');
+      grp.innerHTML = '';
+      for (i in users ) {
+        grp.insertAdjacentHTML('beforeend', '<li>' + users[i].name + '</li>')
+      }
+    }
+  });
 	
   var enableAndDisable = function () {
       msgTextBox.disabled = false;
       sendButton.disabled =  false;
       joinButton.disabled = true;
-      nameTextBox.disabled = false;
+      nameTextBox.disabled = true;
   };
 
   joinButton.onclick = function (event) {

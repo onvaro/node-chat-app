@@ -10,10 +10,14 @@ block content
 		br
 		br
 		.row
-			.col-md-10
-				div(class="panel panel-info" style="height: 300px; scroll: auto;")
+			.col-md-8
+				div(class="panel panel-info" style="height: 300px; overflow: auto;")
 					.panel-body
-						ul(class='list-group' id='chat-group')
+						div(class='list-group' id='chat-group')
+			.col-md-2
+				div(class="panel panel-info" style="height: 300px; overflow: auto;")
+					.panel-body
+						ul(class='list-group' id='user-group' style="height: 300px; overflow: auto;")
 		br
 		br
 		.row
